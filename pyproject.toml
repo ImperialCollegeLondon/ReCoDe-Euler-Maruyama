@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "euler-maruyama"
+version = "0.1.0"
+description = "ReCoDe - Python class for the Euler-Maruyama method for solving stochastic differential equations."
+authors = [
+    "Antonio Malpica <a.malpica-morales@imperial.ac.uk>",
+    "Chris Cooling <c.cooling10@imperial.ac.uk>"
+]
+readme = "README.md"
+packages = [{include = "euler_maruyama", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.24.3"
+matplotlib = "^3.7.1"
+jupyter = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -154,9 +154,31 @@ class EulerMaruyama:
         plt.show()
 
 
-#TODO: Add docstring
 class CustomEulerMaruyama(EulerMaruyama):
-    """
+    """Class that extends EulerMaruyama to change number of simulations and number of time steps.
+
+    Parameters
+    ----------
+    t_0: float
+        Initial time.
+
+    t_n: float
+        Final time.
+
+    n_steps: int
+        Number of time steps to discretise the time interval [t_0, t_n].
+
+    X_0: float
+        Initial condition of the SDE.
+
+    drift: Coefficient
+        Drift (mu) coefficient of the SDE.
+
+    diffusion: Coefficient
+        Diffusion (sigma) coefficient of the SDE.
+
+    n_sim: int
+        Number of simulated approximations.
 
     Methods
     -------
@@ -178,7 +200,7 @@ class CustomEulerMaruyama(EulerMaruyama):
         self.n_sim = new_n_sim
 
     def change_n_steps(self, new_n_steps: int):
-        """Change the number of steps attributes and recalculate the discretisation.
+        """Change the number of time steps attribute and recalculate the discretisation.
 
         Parameters
         ----------

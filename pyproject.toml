@@ -3,7 +3,7 @@ name = "euler-maruyama"
 version = "0.1.0"
 description = "ReCoDe - Python class for the Euler-Maruyama method for solving stochastic differential equations."
 authors = [
-    "Antonio Malpica <a.malpica-morales@imperial.ac.uk>",
+    "Antonio Malpica <a.malpica-morales21@imperial.ac.uk>",
     "Chris Cooling <c.cooling10@imperial.ac.uk>"
 ]
 readme = "README.md"

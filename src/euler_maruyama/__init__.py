@@ -1,2 +1,2 @@
-from .coefficients import ConstantDiffusion, LinearDrift
+from .coefficients import ConstantDiffusion, LinearDrift, MeanReversionDrift, MultiplicativeNoiseDiffusion
 from .euler_maruyama import CustomEulerMaruyama, EulerMaruyama

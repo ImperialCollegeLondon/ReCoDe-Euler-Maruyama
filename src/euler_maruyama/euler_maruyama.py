@@ -176,7 +176,7 @@ class EulerMaruyama:
         Parameters
         ----------
         title: str
-            Title of the figure
+            Title of the figure.
         """
 
         fig, ax = plt.subplots(figsize=(10, 7))

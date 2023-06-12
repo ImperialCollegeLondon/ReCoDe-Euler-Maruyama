@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Coefficient(ABC):
-    """Abstract class to define the internal structure of drift and diffusion coefficients.
+    """Abstract class to define the internal structure of the drift and diffusion coefficients.
 
     Methods
     -------
@@ -12,6 +12,8 @@ class Coefficient(ABC):
     """
     def __init__(self):
         pass
+
+    #TODO: Add method to plot or compute values
 
     @abstractmethod
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:

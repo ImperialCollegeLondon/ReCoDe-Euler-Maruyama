@@ -84,19 +84,36 @@ class ParallelEulerMaruyama(EulerMaruyama):
         super().__init__(t_0=t_0, t_n=t_n, n_steps=n_steps, X_0=X_0, drift=drift, diffusion=diffusion, n_sim=n_sim)
         self._n_jobs = n_jobs
 
+    @property
+    def n_jobs(self):
+        return self._n_jobs
+
+    @n_jobs.setter
+    def n_jobs(self, value: int):
+        """ Change the number of batches.
+
+        Parameters
+        ----------
+        value: int
+            Number of batches.
+        """
+        if value > 0:
+            self._n_jobs = value
+        else:
+            raise ValueError("Number of batches must be positive.")
+
     def _num_sim_batch(self) -> list[int]:
-        """Calculate the number of simulations wihtin each batch for parallel computation.
+        """Calculate the number of simulations within each batch for parallel computation.
 
         Returns
         -------
         batches: list[int]
             List containing the number of simulations to include in each batch.
         """
-        batch_size = self.n_sim // self._n_jobs
-        batches = [batch_size] * self._n_jobs
+        batch_size = self._n_sim // self._n_jobs
+        remainder = self._n_sim % self._n_jobs
 
-        if self.n_sim % self._n_jobs > 0:
-            batches.append(self.n_sim % self._n_jobs)
+        batches = [batch_size] * (self._n_jobs - remainder) + [batch_size + 1] * remainder
 
         return batches
 
@@ -110,7 +127,7 @@ class ParallelEulerMaruyama(EulerMaruyama):
         """
         Y_dim_batch_list = self._num_sim_batch()
 
-        Y = Parallel(n_jobs=self._n_jobs, verbose=0)(
+        Y = Parallel(n_jobs=self._n_jobs)(
             delayed(self._solve_numerical_approximation)(dim=Y_dim) for Y_dim in Y_dim_batch_list
         )
 

@@ -85,6 +85,7 @@ class EulerMaruyama:
 
     def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient, n_sim: int):
 
+
         self._t_0 = t_0
         self._t_n = t_n
         self._n_steps = n_steps
@@ -96,8 +97,8 @@ class EulerMaruyama:
 
         self._n_sim = n_sim
 
+        self.Y = None
         self._compute_discretisation()
-        self._allocate_Y()
 
     @property
     def n_sim(self):
@@ -142,32 +143,60 @@ class EulerMaruyama:
         self.steps = np.arange(0, self._n_steps + 1)
         self.t = self._t_0 + self.steps * self.delta
 
-    def _allocate_Y(self) -> None:
-        """Allocate an array for the approximated solution."""
-        self.Y = np.zeros((self._n_sim, self._n_steps+1), dtype=float)
-        self.Y[:, 0] = self._X_0 * np.ones(self._n_sim)
+    def _allocate_Y(self, dim: int) -> np.ndarray:
+        """Allocate an array for the approximated solution.
 
-    def compute_numerical_approximation(self) -> np.ndarray:
-        """Compute the EM approximation.
+        Parameters
+        ----------
+        dim: int
+            Number of simulations, dimension 0 of Y.
+
+        Returns
+        -------
+        Y: np.ndarray
+            Array for the approximated solution.
+        """
+        Y = np.zeros((dim, self._n_steps+1), dtype=float)
+        Y[:, 0] = self._X_0 * np.ones(dim)
+        return Y
+
+    def _solve_numerical_approximation(self, dim: int) -> np.ndarray:
+        """Solve the EM approximation for the given number of simulated trajectories.
+
+        Parameters
+        ----------
+        dim: int
+            The number of simulations, dimension 0 of Y.
 
         Returns
         -------
         Y: np.ndarray
             Array containing the approximated solution of the SDE, shape(n_sim, n_steps+1).
         """
-        self._allocate_Y()  # Y must be reset at each execution
+        Y = self._allocate_Y(dim=dim)
         for n in self.steps[:-1]:
             tau_n = self.t[n]
-            Y_n = self.Y[:, n]
+            Y_n = Y[:, n]
 
             mu = self._drift.get_value(X=Y_n, t=tau_n)
             sigma = self._diffusion.get_value(X=Y_n, t=tau_n)
 
-            dW = np.random.normal(loc=0, scale=np.sqrt(self.delta), size=self._n_sim)
+            dW = np.random.normal(loc=0, scale=np.sqrt(self.delta), size=dim)
 
             # Compute next step of the EM scheme
-            self.Y[:, n + 1] = Y_n + mu * self.delta + sigma * dW
+            Y[:, n + 1] = Y_n + mu * self.delta + sigma * dW
 
+        return Y
+
+    def compute_numerical_approximation(self) -> np.ndarray:
+        """Compute the EM approximation for all simulated trajectories.
+
+        Returns
+        -------
+        Y: np.ndarray
+            Array containing the approximated solution of the SDE, shape(n_sim, n_steps+1).
+        """
+        self.Y = self._solve_numerical_approximation(dim=self._n_sim)
         return self.Y
 
     def plot_approximation(self, title: str) -> None:

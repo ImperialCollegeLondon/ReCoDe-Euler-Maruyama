@@ -18,3 +18,23 @@ for their research projects. After going through this project, students will:
 1. Understand how to solve an SDE using the EM method.
 2. Learn to encapsulate the EM method code into a Python class.
 3. Explore how to parallelise the code to improve solution speed.
+
+
+## Requirements
+
+### System
+
+| Program                                                    | Version |
+| ---------------------------------------------------------- |---------|
+| [Anaconda](https://www.anaconda.com/products/distribution) | >= 4.1  |
+| [Python](https://www.python.org/downloads/)                | >= 3.9  |
+
+### Dependencies
+
+| Packages                                               | Version   |
+|--------------------------------------------------------|-----------|
+| [poetry](https://python-poetry.org/docs/)              | = 1.5.*   |
+| [numpy](https://numpy.org/doc/stable/)                 | >= 1.24.* |
+| [matplotlib](https://matplotlib.org/stable/index.html) | >= 3.7.*  |
+| [jupyter](http://jupyter.org/install)                  | >= 1.0.*  |
+| [joblib](https://joblib.readthedocs.io/en/stable/)     | >= 1.2.*  |

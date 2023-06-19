@@ -1,14 +1,17 @@
 from abc import ABC, abstractmethod
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 
 class Coefficient(ABC):
-    """Abstract class to define the internal structure of drift and diffusion coefficients.
+    """Abstract class to define the internal structure of the drift and diffusion coefficients.
 
     Methods
     -------
     get_value
+    plot_X_sample
+    plot_t_sample
     """
     def __init__(self):
         pass
@@ -16,6 +19,38 @@ class Coefficient(ABC):
     @abstractmethod
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:
         raise NotImplementedError
+
+    def plot_X_sample(self) -> None:
+        """Plot the coefficient value for 100 samples of X between 0 and 10."""
+        result = np.zeros(100)
+        x_array = np.linspace(0, 10, 100)
+        for i, x in enumerate(x_array):
+            result[i] = self.get_value(X=np.array(x), t=0)
+
+        fig, ax = plt.subplots(figsize=(10, 7))
+
+        ax.plot(x_array, result)
+
+        ax.set_xlabel(r"$X$")
+        ax.set_ylabel(r"Coefficient value")
+
+        plt.show()
+
+    def plot_t_sample(self) -> None:
+        """Plot the coefficient value for 100 samples of t between 0 and 1."""
+        result = np.zeros(100)
+        t_array = np.linspace(0, 1, 100)
+        for i, t in enumerate(t_array):
+            result[i] = self.get_value(X=np.array(1.), t=t)
+
+        fig, ax = plt.subplots(figsize=(10, 7))
+
+        ax.plot(t_array, result)
+
+        ax.set_xlabel(r"$t$")
+        ax.set_ylabel(r"Coefficient value")
+
+        plt.show()
 
 
 class LinearDrift(Coefficient):

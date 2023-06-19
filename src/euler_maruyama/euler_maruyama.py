@@ -44,6 +44,27 @@ class EulerMaruyama:
 
     Attributes
     ----------
+    _t_0: float
+        Initial time.
+
+    _t_n: float
+        Final time.
+
+    _n_steps: int
+        Number of time steps to discretise the time interval [t_0, t_n].
+
+    _X_0: float
+        Initial condition of the SDE.
+
+    _drift: Coefficient
+        Drift (mu) coefficient of the SDE.
+
+    _diffusion: Coefficient
+        Diffusion (sigma) coefficient of the SDE.
+
+    _n_sim: int
+        Number of simulated approximations.
+
     delta: float
         Length of the time step.
 
@@ -54,7 +75,7 @@ class EulerMaruyama:
         Array containing the time steps values, shape: (n_steps+1,).
 
     Y: np.ndarray
-        Array containing the approximated solution of the SDE, shape: shape(n_sim, n_steps).
+        Array containing the approximated solution of the SDE, shape: shape(n_sim, n_steps+1).
 
     Methods
     -------
@@ -64,81 +85,127 @@ class EulerMaruyama:
 
     def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient, n_sim: int):
 
-        self.t_0 = t_0
-        self.t_n = t_n
-        self.n_steps = n_steps
 
-        self.X_0 = X_0
+        self._t_0 = t_0
+        self._t_n = t_n
+        self._n_steps = n_steps
 
-        self.drift = drift
-        self.diffusion = diffusion
+        self._X_0 = X_0
 
-        self.n_sim = n_sim
+        self._drift = drift
+        self._diffusion = diffusion
 
-        self.delta, self.steps, self.t = self._compute_discretisation()
-        self.Y = self._allocate_Y()
+        self._n_sim = n_sim
 
-    def _compute_discretisation(self) -> tuple[float, np.ndarray, np.ndarray]:
-        """Calculate time step length and number of steps array.
+        self.Y = None
+        self._compute_discretisation()
 
-        Returns
-        -------
-        delta: float
-            Length of the time step.
+    @property
+    def n_sim(self):
+        return self._n_sim
 
-        steps: np.ndarray
-            Array containing the time steps ordinals, shape: (n_steps+1,).
+    @n_sim.setter
+    def n_sim(self, value: int):
+        """ Change the number of simulations.
 
-        t: np.ndarray
-            Array containing the time steps values, shape: (n_steps+1,).
+        Parameters
+        ----------
+        value: int
+            Number of simulations.
         """
-        delta = (self.t_n - self.t_0) / self.n_steps
-        steps = np.arange(0, self.n_steps + 1)
-        t = self.t_0 + steps * delta
-        return delta, steps, t
+        if value > 0:
+            self._n_sim = value
+        else:
+            raise ValueError("Number of simulations must be positive.")
 
-    def _allocate_Y(self):
+    @property
+    def n_steps(self):
+        return self._n_steps
+
+    @n_steps.setter
+    def n_steps(self, value: int):
+        """Change the number of time steps attribute and recalculate the discretisation.
+
+        Parameters
+        ----------
+        value: int
+            Number of time steps.
+        """
+        if value > 0:
+            self._n_steps = value
+            self._compute_discretisation()
+        else:
+            raise ValueError("Number of steps must be positive.")
+
+    def _compute_discretisation(self) -> None:
+        """Calculate time step length and number of steps array."""
+        self.delta = (self._t_n - self._t_0) / self._n_steps
+        self.steps = np.arange(0, self._n_steps + 1)
+        self.t = self._t_0 + self.steps * self.delta
+
+    def _allocate_Y(self, dim: int) -> np.ndarray:
         """Allocate an array for the approximated solution.
 
-        Returns
-        -------
-        np.ndarray
-            Array containing the approximated solution of the SDE, shape (n_sim, n_steps+1).
-        """
-        Y = np.zeros((self.n_sim, self.n_steps+1), dtype=float)
-        Y[:, 0] = self.X_0 * np.ones(self.n_sim)
-        return Y
-
-    def compute_numerical_approximation(self):
-        """Compute the EM approximation.
+        Parameters
+        ----------
+        dim: int
+            Number of simulations, dimension 0 of Y.
 
         Returns
         -------
         Y: np.ndarray
-            Array containing the approximated solution of the SDE, shape(n_sim, n_steps).
+            Array for the approximated solution.
         """
-        self.Y = self._allocate_Y()  # Y must be reset at each execution
+        Y = np.zeros((dim, self._n_steps+1), dtype=float)
+        Y[:, 0] = self._X_0 * np.ones(dim)
+        return Y
+
+    def _solve_numerical_approximation(self, dim: int) -> np.ndarray:
+        """Solve the EM approximation for the given number of simulated trajectories.
+
+        Parameters
+        ----------
+        dim: int
+            The number of simulations, dimension 0 of Y.
+
+        Returns
+        -------
+        Y: np.ndarray
+            Array containing the approximated solution of the SDE, shape(n_sim, n_steps+1).
+        """
+        Y = self._allocate_Y(dim=dim)
         for n in self.steps[:-1]:
             tau_n = self.t[n]
-            Y_n = self.Y[:, n]
+            Y_n = Y[:, n]
 
-            mu = self.drift.get_value(X=Y_n, t=tau_n)
-            sigma = self.diffusion.get_value(X=Y_n, t=tau_n)
+            mu = self._drift.get_value(X=Y_n, t=tau_n)
+            sigma = self._diffusion.get_value(X=Y_n, t=tau_n)
 
-            dW = np.random.normal(loc=0, scale=np.sqrt(self.delta), size=self.n_sim)
+            dW = np.random.normal(loc=0, scale=np.sqrt(self.delta), size=dim)
 
             # Compute next step of the EM scheme
-            self.Y[:, n + 1] = Y_n + mu * self.delta + sigma * dW
+            Y[:, n + 1] = Y_n + mu * self.delta + sigma * dW
 
+        return Y
+
+    def compute_numerical_approximation(self) -> np.ndarray:
+        """Compute the EM approximation for all simulated trajectories.
+
+        Returns
+        -------
+        Y: np.ndarray
+            Array containing the approximated solution of the SDE, shape(n_sim, n_steps+1).
+        """
+        self.Y = self._solve_numerical_approximation(dim=self._n_sim)
         return self.Y
 
-    def plot_approximation(self, title: str):
+    def plot_approximation(self, title: str) -> None:
         """Plot the numerical approximation obtained for the SDE.
 
         Parameters
         ----------
         title: str
-            Title of the figure
+            Title of the figure.
         """
 
         fig, ax = plt.subplots(figsize=(10, 7))
@@ -152,60 +219,3 @@ class EulerMaruyama:
         ax.set_title(title)
 
         plt.show()
-
-
-class CustomEulerMaruyama(EulerMaruyama):
-    """Class that extends EulerMaruyama to change number of simulations and number of time steps.
-
-    Parameters
-    ----------
-    t_0: float
-        Initial time.
-
-    t_n: float
-        Final time.
-
-    n_steps: int
-        Number of time steps to discretise the time interval [t_0, t_n].
-
-    X_0: float
-        Initial condition of the SDE.
-
-    drift: Coefficient
-        Drift (mu) coefficient of the SDE.
-
-    diffusion: Coefficient
-        Diffusion (sigma) coefficient of the SDE.
-
-    n_sim: int
-        Number of simulated approximations.
-
-    Methods
-    -------
-    change_n_sim
-    change_n_steps
-    """
-
-    def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient, n_sim: int):
-        super().__init__(t_0=t_0, t_n=t_n, n_steps=n_steps, X_0=X_0, drift=drift, diffusion=diffusion, n_sim=n_sim)
-
-    def change_n_sim(self, new_n_sim: int):
-        """Change the number of simulated approximations.
-
-        Parameters
-        ----------
-        new_n_sim: int
-            The new number of simulated approximations of the EM method.
-        """
-        self.n_sim = new_n_sim
-
-    def change_n_steps(self, new_n_steps: int):
-        """Change the number of time steps attribute and recalculate the discretisation.
-
-        Parameters
-        ----------
-        new_n_steps: int
-            The new number of steps of the EM method.
-        """
-        self.n_steps = new_n_steps
-        self.delta, self.steps, self.t = self._compute_discretisation()

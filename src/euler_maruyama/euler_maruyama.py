@@ -139,9 +139,8 @@ class EulerMaruyama:
 
     def _compute_discretisation(self) -> None:
         """Calculate time step length and number of steps array."""
-        self.delta = (self._t_n - self._t_0) / self._n_steps
         self.steps = np.arange(0, self._n_steps + 1)
-        self.t = self._t_0 + self.steps * self.delta
+        self.t, self.delta = np.linspace(self._t_0, self._t_n, self._n_steps + 1, retstep=True)
 
     def _allocate_Y(self, dim: int) -> np.ndarray:
         """Allocate an array for the approximated solution.

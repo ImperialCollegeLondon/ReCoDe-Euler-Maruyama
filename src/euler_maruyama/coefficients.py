@@ -27,7 +27,7 @@ class Coefficient(ABC):
         for i, x in enumerate(x_array):
             result[i] = self.get_value(X=np.array(x), t=0)
 
-        fig, ax = plt.subplots(figsize=(10, 7))
+        fig, ax = plt.subplots(figsize=(7, 5))
 
         ax.plot(x_array, result)
 
@@ -43,7 +43,7 @@ class Coefficient(ABC):
         for i, t in enumerate(t_array):
             result[i] = self.get_value(X=np.array(1.), t=t)
 
-        fig, ax = plt.subplots(figsize=(10, 7))
+        fig, ax = plt.subplots(figsize=(7, 5))
 
         ax.plot(t_array, result)
 

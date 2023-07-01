@@ -17,7 +17,7 @@ def plot_approximation(Y: np.ndarray, t: np.ndarray, title: str) -> None:
         Title of the figure.
     """
 
-    fig, ax = plt.subplots(figsize=(10, 7))
+    fig, ax = plt.subplots(figsize=(7, 5))
 
     ax.plot(t, Y.T, alpha=0.3)
 

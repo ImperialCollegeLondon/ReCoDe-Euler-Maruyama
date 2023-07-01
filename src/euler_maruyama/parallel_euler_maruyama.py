@@ -65,9 +65,6 @@ class ParallelEulerMaruyama(EulerMaruyama):
     delta: float
         Length of the time step.
 
-    steps: np.ndarray
-        Array containing the time steps ordinals, shape: (n_steps+1,).
-
     t: np.ndarray
         Array containing the time steps values, shape: (n_steps+1,).
 

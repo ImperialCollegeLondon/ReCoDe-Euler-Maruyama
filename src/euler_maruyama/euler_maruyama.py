@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 from .coefficients import Coefficient
@@ -77,7 +76,6 @@ class EulerMaruyama:
     Methods
     -------
     compute_numerical_approximation
-    plot_approximation
     """
 
     def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient, n_sim: int):
@@ -193,24 +191,3 @@ class EulerMaruyama:
         """
         self.Y = self._solve_numerical_approximation(dim=self._n_sim)
         return self.Y
-
-    def plot_approximation(self, title: str) -> None:
-        """Plot the numerical approximation obtained for the SDE.
-
-        Parameters
-        ----------
-        title: str
-            Title of the figure.
-        """
-
-        fig, ax = plt.subplots(figsize=(10, 7))
-
-        y_T = self.Y.T
-        ax.plot(self.t, y_T, alpha=0.3)
-
-        ax.set_xlabel(r"$t$")
-        ax.set_ylabel(r"$Y_t$")
-
-        ax.set_title(title)
-
-        plt.show()

@@ -68,9 +68,6 @@ class EulerMaruyama:
     delta: float
         Length of the time step.
 
-    steps: np.ndarray
-        Array containing the time steps ordinals, shape: (n_steps+1,).
-
     t: np.ndarray
         Array containing the time steps values, shape: (n_steps+1,).
 
@@ -138,8 +135,7 @@ class EulerMaruyama:
             raise ValueError("Number of steps must be positive.")
 
     def _compute_discretisation(self) -> None:
-        """Calculate time step length and number of steps array."""
-        self.steps = np.arange(0, self._n_steps + 1)
+        """Calculate time steps and time delta."""
         self.t, self.delta = np.linspace(self._t_0, self._t_n, self._n_steps + 1, retstep=True)
 
     def _allocate_Y(self, dim: int) -> np.ndarray:
@@ -173,7 +169,7 @@ class EulerMaruyama:
             Array containing the approximated solution of the SDE, shape(n_sim, n_steps+1).
         """
         Y = self._allocate_Y(dim=dim)
-        for n in self.steps[:-1]:
+        for n in range(self._n_steps + 1)[:-1]:
             tau_n = self.t[n]
             Y_n = Y[:, n]
 

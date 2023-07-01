@@ -63,7 +63,7 @@ class LinearDrift(Coefficient):
     Parameters
     ---------
     a: float
-        The linear coefficient of drift
+        The linear coefficient of drift.
 
     Methods
     -------
@@ -75,6 +75,21 @@ class LinearDrift(Coefficient):
         self.a = a
 
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:
+        """Compute the linear drift value as mu(X_t, t) = a*t.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            The X_t values, shape = (number of simulations, )
+
+        t: flotat
+            The time value.
+
+        Returns
+        -------
+        np.ndarray
+            The linear drift coefficient values, shape = (number of simulations, )
+        """
         return np.ones_like(X) * self.a*t
 
 
@@ -104,6 +119,21 @@ class MeanReversionDrift(Coefficient):
         self.mean = mean
 
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:
+        """Compute the mean-reversion drift value as mu(X_t, t) = theta*(mean - X_t).
+
+        Parameters
+        ----------
+        X: np.ndarray
+            The X_t values, shape = (number of simulations, )
+
+        t: flotat
+            The time value.
+
+        Returns
+        -------
+        np.ndarray
+            The mean-reversion drift coefficient values, shape = (number of simulations, )
+        """
         return self.theta * (self.mean - X)
 
 
@@ -129,6 +159,21 @@ class ConstantDiffusion(Coefficient):
         self.b = b
 
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:
+        """Compute the constant diffusion value as sigma(X_t, t) = b.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            The X_t values, shape = (number of simulations, )
+
+        t: flotat
+            The time value.
+
+        Returns
+        -------
+        np.ndarray
+            The constant diffusion coefficient values, shape = (number of simulations, )
+        """
         return np.ones_like(X) * self.b
 
 
@@ -154,4 +199,19 @@ class MultiplicativeNoiseDiffusion(Coefficient):
         self.b = b
 
     def get_value(self, X: np.ndarray, t: float) -> np.ndarray:
+        """Compute the multiplicative noise-like diffusion value as sigma(X_t, t) = b*X_t.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            The X_t values, shape = (number of simulations, )
+
+        t: flotat
+            The time value.
+
+        Returns
+        -------
+        np.ndarray
+            The multiplicative noise-like diffusion coefficient values, shape = (number of simulations, )
+        """
         return self.b * X

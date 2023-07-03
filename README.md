@@ -64,8 +64,8 @@ for their research projects. After going through this project, students will:
 ## Getting Started
 
 You can read the Jupyter notebooks non-interactively on Github. Click [here](https://github.com/ImperialCollegeLondon/ReCoDe_Euler_Maruyama/tree/main/notebooks)
-to view the collection of Jupyter notebooks located in the ``notebooks`` folder. However, for an improve experience, we suggest cloning the Github repository and running the Jupyter notebooks on your local
-machine. To assist you setting up the project locally, we provide a list of setps:
+to view the collection of Jupyter notebooks located in the ``notebooks`` folder. However, for an improved experience, we suggest cloning the Github repository and running the Jupyter notebooks on your local
+machine. To assist you setting up the project locally, we provide a list of steps:
 
 ### 1. Clone the repository
 
@@ -78,9 +78,13 @@ cd euler-maruyama
 
 ### 2. Install poetry
 
-Once you have downloaded a `Python` version, you need to install `poetry`. It is `Python` library 
-specifically design to management dependencies and package projects. You can find more information in
-its [documentation](https://python-poetry.org/)
+Once you have downloaded a `Python` version, you need to install `poetry`. 
+`Poetry` is a dependency management and packaging tool for `Python` projects that simplifies the process of managing dependencies and distributing packages.
+It allows you to define project dependencies in a `pyproject.toml` file and provides commands to install, update, and remove dependencies. 
+The main advantages of `poetry` include dependency resolution to ensure consistent environments, the management of virtual environments for isolation and simplified package publishing. 
+It streamlines the development workflow and facilitates collaboration by providing a unified and straightforward approach to managing dependencies in `Python` projects.
+You can find more information in its [documentation](https://python-poetry.org/).
+Our main focus here is to use `poetry` to install the project and their dependencies locally.
 
 ```bash
 pip install poetry

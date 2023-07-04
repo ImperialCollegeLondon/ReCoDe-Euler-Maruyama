@@ -78,8 +78,16 @@ class EulerMaruyama:
     compute_numerical_approximation
     """
 
-    def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient, n_sim: int):
-
+    def __init__(
+        self,
+        t_0: float,
+        t_n: float,
+        n_steps: int,
+        X_0: float,
+        drift: Coefficient,
+        diffusion: Coefficient,
+        n_sim: int,
+    ):
 
         self._t_0 = t_0
         self._t_n = t_n
@@ -101,7 +109,7 @@ class EulerMaruyama:
 
     @n_sim.setter
     def n_sim(self, value: int):
-        """ Change the number of simulations.
+        """Change the number of simulations.
 
         Parameters
         ----------
@@ -134,7 +142,9 @@ class EulerMaruyama:
 
     def _compute_discretisation(self) -> None:
         """Calculate time steps and time delta."""
-        self.t, self.delta = np.linspace(self._t_0, self._t_n, self._n_steps + 1, retstep=True)
+        self.t, self.delta = np.linspace(
+            self._t_0, self._t_n, self._n_steps + 1, retstep=True
+        )
 
     def _allocate_Y(self, dim: int) -> np.ndarray:
         """Allocate an array for the approximated solution.
@@ -149,7 +159,7 @@ class EulerMaruyama:
         Y: np.ndarray
             Array for the approximated solution.
         """
-        Y = np.zeros((dim, self._n_steps+1), dtype=float)
+        Y = np.zeros((dim, self._n_steps + 1), dtype=float)
         Y[:, 0] = self._X_0 * np.ones(dim)
         return Y
 

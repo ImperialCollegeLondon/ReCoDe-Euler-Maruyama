@@ -1,0 +1,38 @@
+name: test - workflow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+
+jobs:
+  tests:
+    name: Test (${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+       python: [ "3.9", "3.10", "3.11" ]
+    container:
+      image: python:${{ matrix.python }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: main
+      - name: Install poetry
+        working-directory: ./main
+        run: |
+          pip install pip poetry --upgrade
+          poetry install --with dev
+      - name: Code format checking
+        working-directory: ./main
+        run: poetry run black .
+      - name: Imports order checking
+        working-directory: ./main
+        run: poetry run isort .
+      - name: Tests
+        working-directory: ./main
+        run: poetry run pytest tests/ -vv

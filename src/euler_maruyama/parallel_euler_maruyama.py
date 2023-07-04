@@ -1,5 +1,4 @@
 import numpy as np
-
 from joblib import Parallel, delayed
 
 from .coefficients import Coefficient
@@ -76,9 +75,26 @@ class ParallelEulerMaruyama(EulerMaruyama):
     compute_numerical_approximation
     """
 
-    def __init__(self, t_0: float, t_n: float, n_steps: int, X_0: float, drift: Coefficient, diffusion: Coefficient,
-                 n_sim: int, n_jobs: int):
-        super().__init__(t_0=t_0, t_n=t_n, n_steps=n_steps, X_0=X_0, drift=drift, diffusion=diffusion, n_sim=n_sim)
+    def __init__(
+        self,
+        t_0: float,
+        t_n: float,
+        n_steps: int,
+        X_0: float,
+        drift: Coefficient,
+        diffusion: Coefficient,
+        n_sim: int,
+        n_jobs: int,
+    ):
+        super().__init__(
+            t_0=t_0,
+            t_n=t_n,
+            n_steps=n_steps,
+            X_0=X_0,
+            drift=drift,
+            diffusion=diffusion,
+            n_sim=n_sim,
+        )
         self._n_jobs = n_jobs
 
     @property
@@ -87,7 +103,7 @@ class ParallelEulerMaruyama(EulerMaruyama):
 
     @n_jobs.setter
     def n_jobs(self, value: int):
-        """ Change the number of batches.
+        """Change the number of batches.
 
         Parameters
         ----------
@@ -110,7 +126,9 @@ class ParallelEulerMaruyama(EulerMaruyama):
         batch_size = self._n_sim // self._n_jobs
         remainder = self._n_sim % self._n_jobs
 
-        batches = [batch_size] * (self._n_jobs - remainder) + [batch_size + 1] * remainder
+        batches = [batch_size] * (self._n_jobs - remainder) + [
+            batch_size + 1
+        ] * remainder
 
         return batches
 
@@ -125,15 +143,10 @@ class ParallelEulerMaruyama(EulerMaruyama):
         Y_dim_batch_list = self._num_sim_batch()
 
         Y = Parallel(n_jobs=self._n_jobs)(
-            delayed(self._solve_numerical_approximation)(dim=Y_dim) for Y_dim in Y_dim_batch_list
+            delayed(self._solve_numerical_approximation)(dim=Y_dim)
+            for Y_dim in Y_dim_batch_list
         )
 
         self.Y = np.concatenate(Y, axis=0)
 
         return self.Y
-
-
-
-
-
-

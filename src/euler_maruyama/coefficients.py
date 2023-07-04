@@ -13,6 +13,7 @@ class Coefficient(ABC):
     plot_X_sample
     plot_t_sample
     """
+
     def __init__(self):
         pass
 
@@ -41,7 +42,7 @@ class Coefficient(ABC):
         result = np.zeros(100)
         t_array = np.linspace(0, 1, 100)
         for i, t in enumerate(t_array):
-            result[i] = self.get_value(X=np.array(1.), t=t)
+            result[i] = self.get_value(X=np.array(1.0), t=t)
 
         fig, ax = plt.subplots(figsize=(7, 5))
 
@@ -90,7 +91,7 @@ class LinearDrift(Coefficient):
         np.ndarray
             The linear drift coefficient values, shape = (number of simulations, )
         """
-        return np.ones_like(X) * self.a*t
+        return np.ones_like(X) * self.a * t
 
 
 class MeanReversionDrift(Coefficient):

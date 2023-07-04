@@ -42,6 +42,8 @@ for their research projects. After going through this project, students will:
 ## Project Structure
 ```bash 
 .
+├── .github/workflows
+│   └── tests_workflow.yaml
 ├── notebooks
 │   ├── 1- Introduction.ipynb
 │   ├── 2- Probability Distributions.ipynb
@@ -54,11 +56,15 @@ for their research projects. After going through this project, students will:
 │       ├── coefficients.py
 │       ├── euler_maruyama.py
 │       └── parallel_euler_maruyama.py
+├── tests
+│   ├── test_coefficient.py
+│   ├── test_euler_maruyama.py
+│   └── test_parallel_euler_maruyama.py
 ├── .gitignore
-├── README.md
 ├── poetry.lock
 ├── poetry.toml
-└── pyproject.toml
+├── pyproject.toml
+└── README.md
 ```
 
 ## Getting Started

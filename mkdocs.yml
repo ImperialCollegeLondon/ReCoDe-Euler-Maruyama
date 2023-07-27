@@ -1,4 +1,4 @@
-site_name: ReCoDE Exemplar Template
+site_name: ReCoDE Euler-Maruyama
 
 # Steps to follow on GitHub to publish your mkdocs site:
 # 1. Create a new branch called gh-pages
@@ -8,7 +8,7 @@ site_name: ReCoDE Exemplar Template
 #    Settings>Actions>General>Workflow permissions, tick `Read and write permissions`
 #    and save this setting.
 # Change this to the name of your repo
-repo_url: https://github.com/ImperialCollegeLondon/ReCoDE-exemplar-template
+repo_url: https://github.com/ImperialCollegeLondon/ReCoDe-Euler-Maruyama
 edit_uri: tree/main/docs/
 
 theme:

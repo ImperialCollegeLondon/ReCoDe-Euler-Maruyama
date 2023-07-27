@@ -1,6 +1,6 @@
 mkdocs
 mkdocs-material
-mkdocs-jupyter
+mkdocs-jupyter==0.21.0
 python-markdown-math
 mkdocs-include-markdown-plugin
 poetry

@@ -44,7 +44,7 @@ for their research projects. After going through this project, students will:
 .
 ├── .github/workflows
 │   └── tests_workflow.yaml
-├── notebooks
+├── docs
 │   ├── 1- Introduction.ipynb
 │   ├── 2- Probability Distributions.ipynb
 │   ├── 3- Euler-Maruyama method.ipynb
@@ -64,13 +64,14 @@ for their research projects. After going through this project, students will:
 ├── poetry.lock
 ├── poetry.toml
 ├── pyproject.toml
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ## Getting Started
 
-You can read the Jupyter notebooks non-interactively on Github. Click [here](https://github.com/ImperialCollegeLondon/ReCoDe_Euler_Maruyama/tree/main/notebooks)
-to view the collection of Jupyter notebooks located in the ``notebooks`` folder. However, for an improved experience, we suggest cloning the Github repository and running the Jupyter notebooks on your local
+You can read the Jupyter notebooks non-interactively on Github. Click [here](https://github.com/ImperialCollegeLondon/ReCoDe_Euler_Maruyama/tree/main/docs)
+to view the collection of Jupyter notebooks located in the ``docs`` folder. However, for an improved experience, we suggest cloning the Github repository and running the Jupyter notebooks on your local
 machine. To assist you setting up the project locally, we provide a list of steps:
 
 ### 1. Clone the repository

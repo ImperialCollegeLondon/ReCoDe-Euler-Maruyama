@@ -46,10 +46,10 @@ for their research projects. After going through this project, students will:
 │   └── tests_workflow.yaml
 ├── docs
 │   ├── 1-Introduction.ipynb
-│   ├── 2-Probability Distributions.ipynb
-│   ├── 3-Euler-Maruyama method.ipynb
-│   ├── 4-Euler-Maruyama class.ipynb
-│   └── 5-Parallel Euler-Maruyama class.ipynb
+│   ├── 2-Probability-Distributions.ipynb
+│   ├── 3-Euler-Maruyama-Method.ipynb
+│   ├── 4-Euler-Maruyama-Class.ipynb
+│   └── 5-Parallel-Euler-Maruyama-Class.ipynb
 ├── src
 │   └── euler_maruyama
 │       ├── __init__.py

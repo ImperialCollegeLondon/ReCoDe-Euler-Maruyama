@@ -1,0 +1,9 @@
+mkdocs
+mkdocs-material
+python-markdown-math
+mkdocs-include-markdown-plugin
+poetry
+numpy
+matplotlib
+jupyter
+joblib

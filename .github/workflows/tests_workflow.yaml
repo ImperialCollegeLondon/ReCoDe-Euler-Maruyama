@@ -7,6 +7,8 @@ on:
       - 'src/**'
       - 'tests/**'
       - 'pyproject.toml'
+      - 'uv.lock'
+      - '.github/workflows/tests_workflow.yaml'
 
 jobs:
   tests:
@@ -17,22 +19,26 @@ jobs:
        python: [ "3.9", "3.10", "3.11" ]
     container:
       image: python:${{ matrix.python }}
+    env:
+      UV_PYTHON: ${{ matrix.python }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           path: main
-      - name: Install poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.13.6"
+      - name: Install dependencies
         working-directory: ./main
-        run: |
-          pip install pip poetry --upgrade
-          poetry install --with dev
+        run: uv sync --locked --group dev
       - name: Code format checking
         working-directory: ./main
-        run: poetry run black .
+        run: uv run --locked black .
       - name: Imports order checking
         working-directory: ./main
-        run: poetry run isort .
+        run: uv run --locked isort .
       - name: Tests
         working-directory: ./main
-        run: poetry run pytest tests/ -vv
+        run: uv run --locked pytest tests/ -vv
